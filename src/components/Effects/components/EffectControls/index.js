@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { HEXToIntColor, title } from '../../../../helpers/utils'
+import { HEXToRGBColor, title } from '../../../../helpers/utils'
 import { calcInputProps, calcInputValue } from '../../../fieldsConfiguration'
 import { sendWSEvent } from '../../../../helpers/requests'
 import { EVENTS } from '../../../../helpers/constants'
@@ -15,7 +15,7 @@ const Control = ({ effectKey, value, handleChangeForm }) => {
   return (
     <div>
       <h3>
-        {title(effectKey)}: <span className="text-secondary">{value}</span>
+        {title(effectKey)}: <span className="text-secondary">{ typeof value === 'object' ? JSON.stringify(value) : value }</span>
       </h3>
       {typeof value === `boolean` ? (
         <label className="switch">
@@ -72,7 +72,7 @@ export const EffectControl = ({ effect = {}, setEffects, activeEffect }) => {
         value = e.target.checked
         break
       case 'color':
-        value = HEXToIntColor(e.target.value)
+        value = HEXToRGBColor(e.target.value)
         break
       case 'range':
         value = parseInt(e.target.value)

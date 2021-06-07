@@ -1,4 +1,4 @@
-import { IntColorToHEX } from '../helpers/utils'
+import { RGBColorToHEX } from '../helpers/utils'
 
 export const fieldsConf = {
   effects: {
@@ -60,7 +60,12 @@ export const calcInputProps = (key, value) => {
 }
 
 export const calcInputValue = (key, value) => {
-  if (key.toLowerCase().includes('color'))
-    return value ? IntColorToHEX(value) : value
+  if (key.toLowerCase().includes('color') && value)
+    try {
+      return RGBColorToHEX(value)
+    } catch (e) {
+      console.warn("Failed to deserialize RGB color", e);
+      return "#000000";
+    }
   return value
 }

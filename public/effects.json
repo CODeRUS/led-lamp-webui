@@ -31,8 +31,8 @@
   { "i": "ZebraNoise", "n": "Zebra 3D", "s": 1, "l": 26, "b": 80 },
   { "i": "ForestNoise", "n": "Forest 3D", "s": 1, "l": 64, "b": 80 },
   { "i": "OceanNoise", "n": "Ocean 3D", "s": 1, "l": 24, "b": 80 },
-  { "i": "Color", "n": "Single color", "s": 10, "l": 1, "b": 80, "color": 0 },
-  { "i": "Snow", "n": "Snow", "s": 255, "l": 33, "b": 80, "color": 16777215 },
+  { "i": "Color", "n": "Single color", "s": 10, "l": 1, "b": 80, "color": { "r": 0, "g": 0, "b": 0 } },
+  { "i": "Snow", "n": "Snow", "s": 255, "l": 33, "b": 80, "color": { "r": 255, "g": 255, "b": 255 } },
   { "i": "Matrix", "n": "Matrix", "s": 255, "l": 25, "b": 80 },
   { "i": "Lighters", "n": "Lighters", "s": 127, "l": 10, "b": 80 },
   {
@@ -185,7 +185,7 @@
     "s": 100,
     "l": 20,
     "b": 80,
-    "color": true,
+    "colored": true,
     "speed": 1,
     "scale": 26
   },

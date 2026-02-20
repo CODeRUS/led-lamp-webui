@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Cache npm
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -28,6 +28,8 @@ jobs:
         set -x
         npm install
         npm run build
+      env:
+        NODE_OPTIONS: --openssl-legacy-provider
 
     - name: Prepare data
       run: |
@@ -40,9 +42,9 @@ jobs:
         sed -i 's#href="#href="https://coderus.github.io/led-lamp-webui#g' data/index-cdn.html
         sed -i 's#src="#src="https://coderus.github.io/led-lamp-webui#g' data/index-cdn.html
         gzip data/index-cdn.html
-      
+
     - name: Upload build result
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: data
@@ -51,15 +53,11 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: |
         set -x
-        assets=()
-        for asset in data/*.gz; do
-          assets+=("-a" "$asset")
-        done
         RELEASE_TAG="$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-        hub release create "${assets[@]}" -m "$RELEASE_TAG" "$RELEASE_TAG"
+        gh release create "$RELEASE_TAG" data/*.gz -t "$RELEASE_TAG"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Deploy GH Actions
       if: github.ref == 'refs/heads/master'
       uses: JamesIves/github-pages-deploy-action@v4

@@ -4,18 +4,20 @@ import { WSReconnectButton } from '../WSReconnectButton'
 import { UpdateModal } from '../UpdateModal'
 import { EmojiBtn } from '../EmojiBtn'
 
-export const Header = ({ powerOn, webSocketConnection }) => (
+export const Header = ({ powerOn, webSocketConnection, onSettingsOpen }) => (
   <div className={`header ${webSocketConnection ? 'active' : 'disconnected'}`}>
     <div className="container">
-      <div className="grid-container-layout">
+      <div className="header-layout">
         <h1 className="heading">LED - {powerOn ? 'working' : 'not working'}</h1>
         <div>
           <WSReconnectButton />
           <PowerButton powerOn={powerOn} />
           <UpdateModal />
+          <EmojiBtn title="Settings" onClick={onSettingsOpen}>
+            {String.fromCodePoint(0x2699, 0xFE0F)}
+          </EmojiBtn>
           <EmojiBtn
-            title="Update"
-            className="icon-btn"
+            title="WiFi"
             onClick={() => {
               window.location.href = '/wifi.html'
             }}

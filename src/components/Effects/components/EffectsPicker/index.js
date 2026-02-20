@@ -2,7 +2,6 @@ import React from 'react'
 
 export const EffectsPicker = ({ effects, activeEffect, setActiveEffect }) => (
   <div>
-    <h2>Effect picker</h2>
     <div className="effects-list">
       {effects.map(({ n }, index) => (
         <button

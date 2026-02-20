@@ -1,8 +1,11 @@
 const webSocketsServerPort = 8000
 const webSocketServer = require('websocket').server
 const http = require('http')
+const fs = require('fs')
+const path = require('path')
 const effects = require('../public/effects')
-// Spinning the http server and the websocket server.
+
+const settingsPath = path.join(__dirname, '..', 'public', 'settings.json')
 
 const requestHandler = (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -14,15 +17,36 @@ const requestHandler = (req, res) => {
     res.end()
     return
   }
-  let body = ''
-  req.on('data', (chunk) => {
-    body += chunk.toString() // convert Buffer to string
-  })
-  req.on('end', () => {
+
+  if (req.method === 'POST' && req.url === '/updateSize') {
+    res.writeHead(200)
     res.end('ok')
-  })
+    return
+  }
+
+  if (req.method === 'POST' && req.url === '/update') {
+    let body = []
+    req.on('data', (chunk) => body.push(chunk))
+    req.on('end', () => {
+      const data = Buffer.concat(body).toString()
+      if (data.startsWith('{')) {
+        try {
+          JSON.parse(data)
+          fs.writeFileSync(settingsPath, data)
+          console.log('Settings saved')
+        } catch (e) {
+          console.log('Invalid JSON:', e.message)
+        }
+      }
+      res.writeHead(200)
+      res.end('ok')
+    })
+    return
+  }
+
   console.log(req.url)
-  res.end('Hello Node.js Server!')
+  res.writeHead(200)
+  res.end('ok')
 }
 
 const server = http.createServer(requestHandler)

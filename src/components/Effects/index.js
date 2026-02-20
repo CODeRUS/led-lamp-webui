@@ -4,9 +4,13 @@ import { EffectControl } from './components/EffectControls'
 import { sendWSEvent } from '../../helpers/requests'
 import { EVENTS } from '../../helpers/constants'
 
+const TAB_CONTROL = 'control'
+const TAB_PICKER = 'picker'
+
 export const Effects = ({ activeWSEffect }) => {
   const [effects, setEffects] = useState([])
   const [activeEffect, setActiveEffect] = useState(activeWSEffect)
+  const [activeTab, setActiveTab] = useState(TAB_CONTROL)
 
   useEffect(() => {
     let fetchEffects = async () => {
@@ -42,18 +46,40 @@ export const Effects = ({ activeWSEffect }) => {
     }
   }, [activeEffect]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const effectName = effects[activeEffect] ? effects[activeEffect].n : ''
+
   return (
-    <div className="grid-container-layout">
-      <EffectControl
-        effect={effects[activeEffect]}
-        activeEffect={activeEffect}
-        setEffects={setEffects}
-      />
-      <EffectsPicker
-        effects={effects}
-        activeEffect={activeEffect}
-        setActiveEffect={setActiveEffect}
-      />
+    <div>
+      <div className="tabs">
+        <button
+          className={`tab ${activeTab === TAB_CONTROL ? 'active' : ''}`}
+          onClick={() => setActiveTab(TAB_CONTROL)}
+        >
+          {effectName || 'Control'}
+        </button>
+        <button
+          className={`tab ${activeTab === TAB_PICKER ? 'active' : ''}`}
+          onClick={() => setActiveTab(TAB_PICKER)}
+        >
+          Effects
+        </button>
+      </div>
+      <div className="layout">
+        <div className={`panel ${activeTab !== TAB_CONTROL ? 'mobile-hidden' : ''}`}>
+          <EffectControl
+            effect={effects[activeEffect]}
+            activeEffect={activeEffect}
+            setEffects={setEffects}
+          />
+        </div>
+        <div className={`panel ${activeTab !== TAB_PICKER ? 'mobile-hidden' : ''}`}>
+          <EffectsPicker
+            effects={effects}
+            activeEffect={activeEffect}
+            setActiveEffect={setActiveEffect}
+          />
+        </div>
+      </div>
     </div>
   )
 }

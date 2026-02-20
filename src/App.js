@@ -2,6 +2,7 @@ import React from 'react'
 import { websocket } from './helpers/requests'
 import { Effects } from './components/Effects'
 import { Header } from './components/Header'
+import { Settings } from './components/Settings'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class App extends React.Component {
       working: null,
       activeEffect: null,
       modalIsOpen: false,
+      settingsOpen: false,
       webSocketConnection: false,
     }
   }
@@ -46,6 +48,7 @@ class App extends React.Component {
         <Header
           powerOn={this.state.working}
           webSocketConnection={this.state.webSocketConnection}
+          onSettingsOpen={() => this.setState({ settingsOpen: true })}
         />
         <div className="container">
           {Number.isInteger(this.state.activeEffect) ? (
@@ -54,6 +57,10 @@ class App extends React.Component {
             'loading...'
           )}
         </div>
+        <Settings
+          isOpen={this.state.settingsOpen}
+          onClose={() => this.setState({ settingsOpen: false })}
+        />
       </>
     )
   }

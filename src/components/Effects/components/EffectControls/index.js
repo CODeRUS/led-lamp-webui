@@ -85,7 +85,6 @@ export const EffectControl = ({ effect = {}, setEffects, activeEffect }) => {
 
   return (
     <div>
-      <h2>Effect control</h2>
       <div>
         {Object.keys(effect).map((key) => (
           <Control
